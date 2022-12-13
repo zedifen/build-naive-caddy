@@ -25,13 +25,13 @@ jobs:
         sudo apt update
         sudo apt install xcaddy
 
-    - name: xcaddy build with
+    - name: Run xcaddy build with
       run: |
         xcaddy build \
           --with github.com/caddyserver/forwardproxy@caddy2=github.com/klzgrad/forwardproxy@naive
 
-    - name: Upload Go test results
+    - name: Upload artifact
       uses: actions/upload-artifact@v3
       with:
         name: caddy-linux-amd64
-        path: ~/go/bin/caddy
+        path: ./caddy
