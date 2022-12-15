@@ -35,9 +35,14 @@ jobs:
         tar -czvf caddy-linux-amd64.tar.gz ./caddy
         # tar -cJvf caddy-linux-amd64.tar.xz ./caddy
 
+    - name: Print SHA256 sum
+      run: |
+        sha256sum ./caddy
+        sha256sum ./caddy-linux-amd64.tar.gz
+
     - name: Upload artifact
       uses: actions/upload-artifact@v3
       with:
-        name: caddy-linux-amd64
+        name: caddy-linux-amd64.tar.gz
         path: ./caddy-linux-amd64.tar.gz
         if-no-files-found: error
