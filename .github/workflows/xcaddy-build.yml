@@ -5,6 +5,10 @@ name: xcaddy build
 
 on:
   workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Release Tag'
+        required: true
 
 jobs:
 
@@ -35,14 +39,17 @@ jobs:
         tar -czvf caddy-linux-amd64.tar.gz ./caddy
         # tar -cJvf caddy-linux-amd64.tar.xz ./caddy
 
-    - name: Print SHA256 sum
+    - name: Calculate SHA256 sum
+      id: checksum
       run: |
-        sha256sum ./caddy
-        sha256sum ./caddy-linux-amd64.tar.gz
+        sha256sum ./caddy-linux-amd64.tar.gz > ./caddy-linux-amd64.tar.gz.sha256sum
+        echo "sha256sum=$(cat ./caddy-linux-amd64.tar.gz.sha256sum)" >> $GITHUB_OUTPUT
 
-    - name: Upload artifact
-      uses: actions/upload-artifact@v3
+    - name: Release
+      uses: softprops/action-gh-release@v1
       with:
-        name: caddy-linux-amd64.tar.gz
-        path: ./caddy-linux-amd64.tar.gz
-        if-no-files-found: error
+        fail_on_unmatched_files: true
+        tag_name: ${{ github.event.inputs.tag }}
+        files: |
+          caddy-linux-amd64.tar.gz
+          caddy-linux-amd64.tar.gz.sha256sum
