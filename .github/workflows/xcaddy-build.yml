@@ -43,7 +43,7 @@ jobs:
       id: checksum
       run: |
         sha256sum ./caddy-linux-amd64.tar.gz > ./caddy-linux-amd64.tar.gz.sha256sum
-        echo "sha256sum=$(cat ./caddy-linux-amd64.tar.gz.sha256sum)" >> $GITHUB_OUTPUT
+        echo "sha256sum=$(awk '{print $1}' ./caddy-linux-amd64.tar.gz.sha256sum)" >> $GITHUB_OUTPUT
 
     - name: Release
       uses: softprops/action-gh-release@v1
