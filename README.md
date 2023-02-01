@@ -28,7 +28,7 @@ Naïve Proxy 对 Caddy 原本 `forwardproxy` 模块的代码进行了修改, 使
 
 在构建 Caddy 时, 使用这份修改的 `forwardproxy` 替换原本的模块, 最后得到的 Caddy 就能够提供 Naïve Proxy 的代理功能了.
 
-Caddy 的自选插件构建构建一般使用 Caddy 方提供的 `xcaddy` 进行. 构建需要 Go 环境, 可以在本地进行, 不过建议使用 GitHub Action, 这样可以省去配置环境的事情. 目前本仓库的 [xcaddy-build.yml](.github/workflows/xcaddy-build.yml) 即为构建适用于 x64 Linux 的 GitHub Action 流程配置文件. 可以 fork 或者使用本仓库的配置文件自行构建, 也可以直接使用本仓库中不定期更新的 [Releases](./releases/latest/) 中的构建产物.
+Caddy 自选插件的构建一般使用 Caddy 方提供的 `xcaddy` 进行. 构建需要 Go 环境, 可以在本地进行, 不过建议使用 GitHub Action, 这样可以省去配置环境的事情. 目前本仓库的 [xcaddy-build.yml](.github/workflows/xcaddy-build.yml) 即为构建适用于 x64 Linux 的 GitHub Action 流程配置文件. 可以 fork 或者使用本仓库的配置文件自行构建, 也可以直接使用本仓库中不定期更新的 [Releases](../../releases/latest/) 中的构建产物.
 
 如果需要自行在本地构建, 或者需要编写自己的构建过程配置文件, 可以参考下面的步骤.
 
