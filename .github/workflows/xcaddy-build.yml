@@ -13,7 +13,17 @@ on:
 jobs:
 
   build:
+    strategy:
+      matrix:
+        target_os: [linux]
+        target_arch: [amd64, arm64]
+
     runs-on: ubuntu-latest
+
+    env:
+      GOOS: ${{ matrix.target_os }}
+      GOARCH: ${{ matrix.target_arch }}
+
     steps:
     - name: Set up Go
       uses: actions/setup-go@v3
@@ -35,15 +45,19 @@ jobs:
           --with github.com/caddyserver/forwardproxy@caddy2=github.com/klzgrad/forwardproxy@naive
 
     - name: Tar artifact
+      id: targz
       run: |
-        tar -czvf caddy-linux-amd64.tar.gz ./caddy
-        # tar -cJvf caddy-linux-amd64.tar.xz ./caddy
+        export ASSET_NAME="caddy-$GOOS-$GOARCH"
+        tar -czvf $ASSET_NAME.tar.gz ./caddy
+        # tar -cJvf $ASSET_NAME.tar.gz ./caddy
+        echo "TARFILE_NAME=$ASSET_NAME.tar.gz" >> $GITHUB_OUTPUT
+        echo "TARFILE_NAME=$ASSET_NAME.tar.gz" >> $GITHUB_ENV
 
     - name: Calculate SHA256 sum
       id: checksum
       run: |
-        sha256sum ./caddy-linux-amd64.tar.gz > ./caddy-linux-amd64.tar.gz.sha256sum
-        echo "sha256sum=$(awk '{print $1}' ./caddy-linux-amd64.tar.gz.sha256sum)" >> $GITHUB_OUTPUT
+        sha256sum $TARFILE_NAME > $TARFILE_NAME.sha256sum
+        echo "SHA_256_SUM=$(awk '{print $1}' $TARFILE_NAME.sha256sum)" >> $GITHUB_OUTPUT
 
     - name: Release
       uses: softprops/action-gh-release@v1
@@ -51,5 +65,7 @@ jobs:
         fail_on_unmatched_files: true
         tag_name: ${{ github.event.inputs.tag }}
         files: |
-          caddy-linux-amd64.tar.gz
-          caddy-linux-amd64.tar.gz.sha256sum
+          ${{ steps.targz.outputs.TARFILE_NAME }}
+          ${{ steps.targz.outputs.TARFILE_NAME }}.sha256sum
+        append_body: |
+          ${{ steps.targz.outputs.TARFILE_NAME }} ${{ steps.checksum.outputs.SHA_256_SUM }}
