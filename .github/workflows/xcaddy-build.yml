@@ -6,6 +6,9 @@ name: xcaddy build
 on:
   workflow_dispatch:
     inputs:
+      forwardproxy:
+        description: 'Define which fork of `forwardproxy` to use.'
+        required: true
       version:
         description: 'Caddy version (master, v2.6.4 or a commit hash)'
         required: true
@@ -27,6 +30,7 @@ jobs:
       GOOS: ${{ matrix.target_os }}
       GOARCH: ${{ matrix.target_arch }}
       CADDY_VERSION: ${{ github.event.inputs.version }}
+      FORWARDPROXY: ${{ github.event.inputs.forwardproxy }}
 
     steps:
     - name: Set up Go
@@ -46,7 +50,7 @@ jobs:
     - name: Run xcaddy build with
       run: |
         xcaddy build $CADDY_VERSION \
-          --with github.com/caddyserver/forwardproxy@caddy2=github.com/klzgrad/forwardproxy@naive
+          --with github.com/caddyserver/forwardproxy@caddy2=$FORWARDPROXY
 
     - name: Tar artifact
       id: targz
