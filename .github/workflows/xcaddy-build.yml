@@ -75,6 +75,7 @@ jobs:
         tag_name: ${{ github.event.inputs.tag }}
         body: |
           Caddy version: ${{ github.event.inputs.version }}
+          Fork of forwardproxy: ${{ github.event.inputs.forwardproxy }}
         files: |
           ${{ steps.targz.outputs.TARFILE_NAME }}
           ${{ steps.targz.outputs.TARFILE_NAME }}.sha256sum
