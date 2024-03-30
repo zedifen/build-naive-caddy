@@ -51,7 +51,7 @@ jobs:
     - name: Run xcaddy build with
       run: |
         xcaddy build $CADDY_VERSION \
-          --with github.com/caddyserver/forwardproxy@caddy2=$FORWARDPROXY
+          --with github.com/caddyserver/forwardproxy=$FORWARDPROXY
 
     - name: Tar artifact
       id: targz
